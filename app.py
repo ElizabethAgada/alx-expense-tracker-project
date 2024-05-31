@@ -73,7 +73,6 @@ def register():
  
         
  #LOGIN--PAGE
-      return render_template("today.html", texpense = texpense, expense = expense,  total = total ,
                            t_food = t_food,t_entertainment =  t_entertainment,
                            t_business = t_business,  t_rent =  t_rent, 
                            t_EMI =  t_EMI,  t_other =  t_other )
