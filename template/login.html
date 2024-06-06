@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Animated Login Form</title>
+	<title>Input Details</title>
 	<link rel="stylesheet" type="text/css" href="..\static\css\login.css">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body >
-	<img class="wave" src="https://img.freepik.com/premium-vector/hello-hand-lettering-doodle-with-waving-hand-background_627079-108.jpg
-	">
+	<img class="wave" src="..\static\images\wave.png">
 	<div class="container">
 		
 		<div class="img">
-
+			<div id="png"><a href="/" title="HOME"><img style="width:75px; height:75px ; " src="..\static\images\home-page.png"></a></div>
+			<img src="..\static\images\bg.svg">
 		</div>
 		
 		<div class="login-content">
 			
 			<form action='/login' method="POST">
-			
-				<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFLHz0vltSz4jyrQ5SmjyKiVAF-xjpuoHcCw&s">
+				<div class="msg">{{ msg }}</div>
+				<img src="..\static\images\avatar.svg">
 				<h2 class="title">Welcome</h2>
            		<div class="input-div one">
            		   <div class="i">
@@ -47,15 +47,15 @@
 				<div><b>Login with</b></div>
 				<div>
 					<ul>
-						<li><a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+						<li><a href="facebook.com"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
 						<li><a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
-						<li><a href="#"><i class="fab fa-google"  aria-hidden="true"></i></a></li>
+						<li><a href="www.gmail.com"><i class="fab fa-google"  aria-hidden="true"></i></a></li>
 						<li><a href="#"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
 						<li><a href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
 					</ul>
 					
 				</div> 
-				<div class="app" ><b>Don't have an account?</b><a id="app1" href="template/signup.html">REGISTER.here</a></div>
+				<div class="app" ><b>Don't have an account?</b><a id="app1" href="/signup">REGISTER.here</a></div>
             </form>
 			
         </div>
