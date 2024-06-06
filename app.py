@@ -69,13 +69,16 @@ def register():
             msg = 'name must contain only characters and numbers !'
         else:
             hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-          #  cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
-#            cursor.execute('INSERT INTO register (id, username, email, password) VALUES (%s, %s, %s)', (username, email, password))
+            #  cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
+            # cursor.execute('INSERT INTO register (id, username, email, password) VALUES (%s, %s, %s)', (username, email, password))
             cursor.execute('INSERT INTO register (username, email, password) VALUES (%s, %s, %s)', (username, email, hashed_password))
             mysql.connection.commit()
-                           t_food = t_food,t_entertainment =  t_entertainment,
-                           t_business = t_business,  t_rent =  t_rent, 
-                           t_EMI =  t_EMI,  t_other =  t_other )
+        t_food = t_food
+        t_entertainment = t_entertainment
+        t_business = t_business
+        t_rent = t_rent
+        t_EMI = t_EMI
+        t_other = t_other
      
 
 @app.route("/month")
