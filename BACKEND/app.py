@@ -9,6 +9,7 @@ from flask import Flask, render_template, request, redirect, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -16,10 +17,10 @@ app = Flask(__name__)
 
 app.secret_key = 'a'
   
-app.config['MYSQL_HOST'] = 'remotemysql.com'
-app.config['MYSQL_USER'] = 'D2DxDUPBii'
-app.config['MYSQL_PASSWORD'] = 'r8XBO4GsMz'
-app.config['MYSQL_DB'] = 'D2DxDUPBii'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'buchiken'
+app.config['MYSQL_PASSWORD'] = 'buken.01'
+app.config['MYSQL_DB'] = 'bblexpense'
 
 mysql = MySQL(app)
 
@@ -27,7 +28,9 @@ mysql = MySQL(app)
 #HOME--PAGE
 @app.route("/home")
 def home():
-    return render_template("homepage.html")
+    if 'loggedin' in session:
+        return render_template("homepage.html", username=session['username'])
+    return redirect('/login')
 
 @app.route("/")
 def add():
@@ -44,19 +47,20 @@ def signup():
 
 
 
-@app.route('/register', methods =['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
-    if request.method == 'POST' :
+    if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         
 
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM register WHERE username = % s', (username, ))
+        cursor.execute('SELECT * FROM register WHERE username = %s', (username,))
         account = cursor.fetchone()
-        print(account)
+        #print(account)
+
         if account:
             msg = 'Account already exists !'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -64,15 +68,11 @@ def register():
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'name must contain only characters and numbers !'
         else:
-            cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
+            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+          #  cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
+#            cursor.execute('INSERT INTO register (id, username, email, password) VALUES (%s, %s, %s)', (username, email, password))
+            cursor.execute('INSERT INTO register (username, email, password) VALUES (%s, %s, %s)', (username, email, hashed_password))
             mysql.connection.commit()
-            msg = 'You have successfully registered !'
-            return render_template('signup.html', msg = msg)
-        
-        
- 
-        
- #LOGIN--PAGE
                            t_food = t_food,t_entertainment =  t_entertainment,
                            t_business = t_business,  t_rent =  t_rent, 
                            t_EMI =  t_EMI,  t_other =  t_other )
