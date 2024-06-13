@@ -10,9 +10,15 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
+from config import Config
+from oauth import init_oauth
+from models import users
+from routes import setup_routes
 
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
 
 app.secret_key = 'a'
@@ -23,6 +29,24 @@ app.config['MYSQL_PASSWORD'] = 'buken.01'
 app.config['MYSQL_DB'] = 'bblexpense'
 
 mysql = MySQL(app)
+
+# setup_Flask_login
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(user_id)
+
+# Initialize OAuth
+init_oauth(app)
+
+# Setup OAuth routes
+setup_routes(app)
+
+# Initialize OAuth within app context
+# with app.app_context():
+    # init_oauth(app)
 
 
 #HOME--PAGE
@@ -49,46 +73,10 @@ def signup():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    msg = ''
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        
-
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM register WHERE username = %s', (username,))
-        account = cursor.fetchone()
-        #print(account)
-
-        if account:
-            msg = 'Account already exists !'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'name must contain only characters and numbers !'
-        else:
-            hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-<<<<<<< HEAD:BACKEND/app.py
-          #  cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
-#            cursor.execute('INSERT INTO register (id, username, email, password) VALUES (%s, %s, %s)', (username, email, password))
-            cursor.execute('INSERT INTO register (username, email, password) VALUES (%s, %s, %s)', (username, email, hashed_password))
-            mysql.connection.commit()
+      return render_template("today.html", texpense = texpense, expense = expense,  total = total ,
                            t_food = t_food,t_entertainment =  t_entertainment,
                            t_business = t_business,  t_rent =  t_rent, 
                            t_EMI =  t_EMI,  t_other =  t_other )
-=======
-            #  cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
-            # cursor.execute('INSERT INTO register (id, username, email, password) VALUES (%s, %s, %s)', (username, email, password))
-            cursor.execute('INSERT INTO register (username, email, password) VALUES (%s, %s, %s)', (username, email, hashed_password))
-            mysql.connection.commit()
-        t_food = t_food
-        t_entertainment = t_entertainment
-        t_business = t_business
-        t_rent = t_rent
-        t_EMI = t_EMI
-        t_other = t_other
->>>>>>> 30e3960f34d86f64bb26ba3d6ef7db23479cdcec:app.py
      
 
 @app.route("/month")
@@ -205,7 +193,7 @@ def year():
 
 @app.route('/logout')
 
-def logout():
+def loggout():
    session.pop('loggedin', None)
    session.pop('id', None)
    session.pop('username', None)
